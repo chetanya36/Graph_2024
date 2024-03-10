@@ -1,0 +1,82 @@
+import java.util.*;
+public class Main
+{
+    static HashMap<Integer,HashMap<Integer,Integer>> map;
+    Main(int v){
+        this.map = new HashMap<>();
+        for(int i=1;i<=v;i++){
+            map.put(i,new HashMap<Integer,Integer>());
+        }
+    }
+    
+    public static void AddEdge(int v1,int v2,int cost){
+        map.get(v1).put(v2,cost);
+        map.get(v2).put(v1,cost);
+    }
+    
+    public static void display(){
+        for(int key : map.keySet()){
+            System.out.println(map.get(key));
+        }
+    }
+    
+    public static boolean BFS(int v1,int v2){
+        LinkedList<Integer> qq = new LinkedList<>();
+        HashSet<Integer> visited = new HashSet<>();
+        qq.add(v1);
+        while(!qq.isEmpty()){
+            int src = qq.remove();
+            if(visited.contains(src)){
+                continue;
+            }
+            visited.add(src);
+            if(src == v2)
+              return true;
+            
+            for(int nbrs:map.get(src).keySet()){
+                if(!visited.contains(nbrs)){
+                    qq.add(nbrs);
+                }
+            }
+            
+        }
+        return false;
+    }
+    
+    public static boolean DFS(int v1,int v2){
+        Stack<Integer> st = new Stack<>();
+        HashSet<Integer> visited = new HashSet<>();
+        st.push(v1);
+        while(!st.isEmpty()){
+            int r = st.pop();
+            if(visited.contains(r)){
+                continue;
+            }
+            visited.add(r);
+            if(r == v2){
+                return true;
+            }
+            for(int nbrs:map.get(r).keySet()){
+                if(!visited.contains(nbrs)){
+                    st.push(nbrs);
+                }
+            }
+        }
+        return false;
+    }
+    
+	public static void main(String[] args) {
+		Main obj = new  Main(7);
+		AddEdge(1,4,6);
+		AddEdge(1,2,10);
+	 	AddEdge(2,3,7);
+	 	AddEdge(3,4,5);
+		AddEdge(5,6,4);
+	 	AddEdge(7,5,2);
+	 	AddEdge(6,7,3);
+		AddEdge(4,5,1);
+		display();
+		System.out.println(BFS(1,6));
+		System.out.println(DFS(1,6));
+	}
+}
